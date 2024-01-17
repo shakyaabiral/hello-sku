@@ -53,6 +53,7 @@ describe("A mini SKUTOPIA API", () => {
         carriers: ["UPS", "USPS", "FEDEX"],
       }
     );
+    console.log(result.data)
     expect(result.status).to.eq(200);
     expect(result.data).to.deep.eq({
       outcome: "SUCCESS",

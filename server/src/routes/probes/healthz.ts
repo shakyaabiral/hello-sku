@@ -4,9 +4,8 @@ import { withAsyncErrorHandling } from '../withAsyncErrorHandling';
 import { ordersRepo } from '../../repos/ordersRepo';
 
 export const handleGetHealthz: RequestHandler = withAsyncErrorHandling(
-  async (req, res) => {
+  async (_, res) => {
     try {
-      // const queryResult = await pool.query(`SELECT 1`);
       const queryResult = await ordersRepo.getOrders();
       if (queryResult) {
         res.status(200).json({
