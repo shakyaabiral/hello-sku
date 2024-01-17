@@ -14,15 +14,13 @@ const apiClient = axios.create({
   },
 });
 
-const ORDERS =
-  loadFixture<{ salesOrders: SalesOrder[] }>("sales-orders.json").salesOrders;
+const ORDERS = loadFixture<{ salesOrders: SalesOrder[] }>(
+  "sales-orders.json"
+).salesOrders;
 
 describe("A mini SKUTOPIA API", () => {
   it("should successfully receive an order", async () => {
-    const result = await apiClient.post(
-      "/orders",
-      ORDERS[0]
-    );
+    const result = await apiClient.post("/orders", ORDERS[0]);
     expect(result.status).to.eq(200);
     expect(result.data).to.deep.eq({
       outcome: "SUCCESS",
@@ -47,12 +45,9 @@ describe("A mini SKUTOPIA API", () => {
     expect((await result2).status).to.eq(200);
   });
   it("should generate a quote for a RECEIVED order", async () => {
-    const result = await apiClient.post(
-      `/orders/${ORDERS[0].id}/quotes`,
-      {
-        carriers: ["UPS", "USPS", "FEDEX"],
-      }
-    );
+    const result = await apiClient.post(`/orders/${ORDERS[0].id}/quotes`, {
+      carriers: ["UPS", "USPS", "FEDEX"],
+    });
     expect(result.status).to.eq(200);
     expect(result.data).to.deep.eq({
       outcome: "SUCCESS",
@@ -77,12 +72,9 @@ describe("A mini SKUTOPIA API", () => {
     });
   });
   it("should successfully book an order", async () => {
-    const result = await apiClient.post(
-      `/orders/${ORDERS[0].id}/bookings`,
-      {
-        carrier: "UPS",
-      }
-    );
+    const result = await apiClient.post(`/orders/${ORDERS[0].id}/bookings`, {
+      carrier: "UPS",
+    });
     expect(result.status).to.eq(200);
     expect(result.data).to.deep.eq({
       outcome: "SUCCESS",
@@ -103,12 +95,9 @@ describe("A mini SKUTOPIA API", () => {
     await apiClient.post(`/orders/${ORDERS[1].id}/quotes`, {
       carriers: ["USPS", "FEDEX"],
     });
-    const result = await apiClient.post(
-      `/orders/${ORDERS[1].id}/bookings`,
-      {
-        carrier: "UPS",
-      }
-    );
+    const result = await apiClient.post(`/orders/${ORDERS[1].id}/bookings`, {
+      carrier: "UPS",
+    });
     expect(result.status).to.eq(400);
     expect(result.data).to.deep.eq({
       outcome: "NO_MATCHING_QUOTE",
@@ -119,17 +108,27 @@ describe("A mini SKUTOPIA API", () => {
     });
   });
   it("should return ORDER ALREADY BOOKED when requesting a quote for a BOOKED order", async () => {
-    const result = await apiClient.post(
-      `/orders/${ORDERS[0].id}/quotes`,
-      {
-        carriers: ["UPS", "FEDEX", "USPS"],
-      }
-    );
+    const result = await apiClient.post(`/orders/${ORDERS[0].id}/quotes`, {
+      carriers: ["UPS", "FEDEX", "USPS"],
+    });
     expect(result.status).to.eq(400);
     expect(result.data).to.deep.eq({
       outcome: "ORDER_ALREADY_BOOKED",
     });
   });
+  it("should return INVALID REQUEST PAYLOAD when requesting a quote with an invalid carrier", async () => {
+    const result = await apiClient.post(`/orders/${ORDERS[0].id}/quotes`, {
+      carriers: ["FOO"],
+    });
+    expect(result.status).to.eq(400);
+  });
+  it("should return INVALID REQUEST PAYLOAD when requesting a quote with an empty carrier", async () => {
+    const result = await apiClient.post(`/orders/${ORDERS[0].id}/quotes`, {
+      carriers: [],
+    });
+    expect(result.status).to.eq(400);
+  });
+
   it("should list more orders", async () => {
     const result = await apiClient.get("/orders");
     expect(result.status).to.eq(200);

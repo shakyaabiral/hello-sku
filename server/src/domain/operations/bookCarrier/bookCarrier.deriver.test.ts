@@ -2,22 +2,27 @@ import { expect } from 'chai';
 import { Order } from '../../entities';
 import { deriveBookCarrierOutcome } from './bookCarrier.deriver';
 
-const mockOrder: Order = {
-  id: '123',
-  customer: 'Sally Bob',
-  items: [
-    {
-      sku: 'SHOE-RED-1',
-      quantity: 1,
-      gramsPerItem: 100,
-      price: 20,
-    },
-  ],
-  quotes: [],
-  status: 'RECEIVED',
-};
-
 describe('bookCarrier.deriver', () => {
+
+  let mockOrder: Order;
+
+  beforeEach(() => {
+    mockOrder = {
+      id: '123',
+      customer: 'Sally Bob',
+      items: [
+        {
+          sku: 'SHOE-RED-1',
+          quantity: 1,
+          gramsPerItem: 100,
+          price: 20,
+        },
+      ],
+      quotes: [],
+      status: 'QUOTED',
+    };
+  });
+
   it('returns ORDER NOT FOUND when passed an undefined order', () => {
     const result = deriveBookCarrierOutcome(undefined, 'UPS');
     expect(result.outcome).to.eq('ORDER_NOT_FOUND');
