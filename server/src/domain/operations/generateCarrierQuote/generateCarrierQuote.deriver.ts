@@ -42,7 +42,7 @@ export const deriveGenerateQuoteOutcome = (
     };
   }
 
-  const quotes = carriers.map((carrier) => generateQuote(order, carrier));
+  const quotes = carriers.map((carrier) => generateQuoteForCarrier(order, carrier));
 
   return {
     outcome: 'SUCCESS',
@@ -79,7 +79,7 @@ const calculateCarrierFees = (
   }
 };
 
-const generateQuote = (order: Order, carrier: CarrierCode): CarrierQuote => ({
+const generateQuoteForCarrier = (order: Order, carrier: CarrierCode): CarrierQuote => ({
   carrier,
   priceCents: calculateCarrierFees(carrier, order.items),
 });

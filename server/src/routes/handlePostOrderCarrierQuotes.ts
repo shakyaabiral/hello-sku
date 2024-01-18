@@ -4,7 +4,7 @@ import { z } from 'zod-http-schemas';
 import {
   generateQuote,
   GenerateQuoteResult,
-} from '../domain/operations/generateQuote';
+} from '../domain/operations/generateCarrierQuote';
 
 const carrierQuoteRequestSchema = z.object({
   carriers: carrierCodeSchema.array(),

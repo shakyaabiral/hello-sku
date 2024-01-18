@@ -1,7 +1,7 @@
 import {
   deriveGenerateQuoteOutcome,
   GenerateQuoteResult,
-} from './generateQuote.deriver';
+} from './generateCarrierQuote.deriver';
 import { ordersRepo } from '../../../repos/ordersRepo';
 import { CarrierCode, Order } from '../../entities';
 
