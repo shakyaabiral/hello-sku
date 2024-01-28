@@ -38,9 +38,9 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
-      - build
+      - build:
           requires:
             - say-hello
-      - run-test
+      - run-test:
           requires:
             - build
